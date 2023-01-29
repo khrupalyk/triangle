@@ -12,6 +12,7 @@ object Main extends App {
 
   val filePath = args.head
 
+  //TODO Move to another service
   TriangleLoader.loadFromFile(filePath) match {
     case Right(triangle) =>
       val minimalPath: MinimalPath = TriangleService.live.getMinimalPath(triangle)
