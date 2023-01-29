@@ -4,6 +4,10 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class MinimumTriangleTest extends AnyFunSuite {
 
+  def loadData(fileName: String): Array[Array[Int]] = {
+    io.Source.fromResource(fileName).getLines().map(_.split(" ").map(_.toInt)).toArray
+  }
+
   type Index = Int
 
   def minTriangle(data: Array[Array[Int]]): List[Index] = {
@@ -51,6 +55,12 @@ class MinimumTriangleTest extends AnyFunSuite {
     )
 
     assert(minTriangle(data2) == List(7,3,5,9))
+  }
+
+  test("Awd") {
+    val data = loadData("tests/data_small.txt")
+    println(data.length)
+    println(minTriangle(data))
   }
 
 }
