@@ -4,19 +4,30 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class MinimumTriangleTest extends AnyFunSuite {
 
-  def minTriangle(data: Array[Array[Int]]): Int = {
+  type Index = Int
 
-    def process(tree: Array[Array[Int]], i: Int, j: Int): Int = {
+  def minTriangle(data: Array[Array[Int]]): List[Index] = {
 
-      if(tree.length == i) return 0
+    type Sum = Int
 
-      val node = tree(i)(j) + Math.min(process(tree, i + 1, j), process(tree, i + 1, j + 1))
+    def process(tree: Array[Array[Int]], i: Int, j: Int): (Sum, List[Index]) = {
 
-      node
+      if(tree.length == i) return (0, Nil)
 
+      val x1 = process(tree, i + 1, j)
+      val x2 = process(tree, i + 1, j + 1)
+
+      val totalSum: Sum = tree(i)(j) + Math.min(x1._1, x2._1)
+      val indexes: List[Index] = j :: (if(x1._1 <= x2._1) x1._2 else x2._2)
+
+      (totalSum, indexes)
     }
 
-    process(data, 0, 0)
+    val result = process(data, 0, 0)
+
+    result._2.zipWithIndex map { case (j, i) =>
+      data(i)(j)
+    }
   }
 
 
@@ -28,7 +39,8 @@ class MinimumTriangleTest extends AnyFunSuite {
       Array(11,2,10,9)
     )
 
-    assert(minTriangle(data) == 18)
+    println(minTriangle(data))
+    assert(minTriangle(data) == List(7, 6, 3, 2))
 
 
     val data2 = Array(
@@ -38,7 +50,7 @@ class MinimumTriangleTest extends AnyFunSuite {
       Array(11, 12, 10, 9)
     )
 
-    assert(minTriangle(data2) == 24)
+    assert(minTriangle(data2) == List(7,3,5,9))
   }
 
 }
